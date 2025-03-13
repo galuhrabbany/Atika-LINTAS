@@ -28,6 +28,8 @@
     <?php echo $__env->yieldContent('scripts'); ?>
 
 
+    <?php echo $__env->make('components.toast', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 </body>
 
 </html>
