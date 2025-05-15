@@ -3,36 +3,29 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama</th>
-                <th>NIM</th>
-                <th>Kelas</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Created At</th>
+                <th>Updated At</th>
             </tr>
         </thead>
         <tbody>
+            //loop points data
+            <?php $__currentLoopData = $points; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
-                <td>1</td>
-                <td>Atika</td>
-                <td>23</td>
-                <td>A</td>
+                <td><?php echo e($p->id); ?></td>
+                <td><?php echo e($p->name); ?></td>
+                <td><?php echo e($p->description); ?></td>
+                <td>
+                    <img src="<?php echo e(asset('storage/images/' . $p->image)); ?>" alt=""
+                    width="200" title="<?php echo e($p->image); ?>">
+                </td>
+                <td><?php echo e($p->image); ?></td>
+                <td><?php echo e($p->created_at); ?></td>
+                <td><?php echo e($p->updated_at); ?></td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Fay</td>
-                <td>23</td>
-                <td>A</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Galuh</td>
-                <td>23</td>
-                <td>A</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Meiva</td>
-                <td>23</td>
-                <td>A</td>
-            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
     </table>
 <?php $__env->stopSection(); ?>

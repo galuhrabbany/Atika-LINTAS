@@ -236,15 +236,25 @@
                 var routedelete = "<?php echo e(route('points.destroy', ':id')); ?>";
                 routedelete = routedelete.replace(':id', feature.properties.id);
 
+                var routeedit = "<?php echo e(route('points.edit', ':id')); ?>";
+                routeedit = routeedit.replace(':id', feature.properties.id);
+
                 var popupContent = "Nama: " + feature.properties.name + "<br>" +
                     "Deskripsi: " + feature.properties.description + "<br>" +
                     "Dibuat: " + feature.properties.created_at + "<br>" +
                     "<img src='<?php echo e(asset('storage/images')); ?>/" + feature.properties.image +
                     "' width='200' alt=''>" + "<br>" +
-                    "<form method='POST' action='" + routedelete +"'>" +
-                    '<?php echo csrf_field(); ?>' + '<?php echo method_field("DELETE"); ?>' +
+                    "<div class='row mt-4'>" +
+                    "<div class='col-6 text-end'>" +
+                    "<a href ='"+routeedit+"' class='btn btn-warning btn-sm'><i class='fa-solid fa-pencil'></i></a>" +
+                    "</div>" +
+                    "<div class='col-6 text-start'>" +
+                    "<form method='POST' action='" + routedelete + "'>" +
+                    '<?php echo csrf_field(); ?>' + '<?php echo method_field('DELETE'); ?>' +
                     "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(`Yakin akan di hapus?`)'><i class='fa-solid fa-trash'></i></button>" +
                     "</form>";
+                "</div>" +
+                "</div>";
 
                 layer.on({
                     click: function(e) {
@@ -268,14 +278,22 @@
                 var routedelete = "<?php echo e(route('polylines.destroy', ':id')); ?>";
                 routedelete = routedelete.replace(':id', feature.properties.id);
 
+                var routeedit = "<?php echo e(route('polylines.edit', ':id')); ?>";
+                routeedit = routeedit.replace(':id', feature.properties.id);
+
                 var popupContent = "Nama: " + feature.properties.name + "<br>" +
                     "Deskripsi: " + feature.properties.description + "<br>" +
                     "Panjang: " + feature.properties.length_km.toFixed(2) + "km <br>" +
                     "Dibuat: " + feature.properties.created_at + "<br>" +
                     "<img src='<?php echo e(asset('storage/images')); ?>/" + feature.properties.image +
                     "' width='200' alt=''>" + "<br>" +
-                    "<form method='POST' action='" + routedelete +"'>" +
-                    '<?php echo csrf_field(); ?>' + '<?php echo method_field("DELETE"); ?>' +
+                    "<div class='row mt-4'>" +
+                    "<div class='col-6 text-end'>" +
+                    "<a href ='"+routeedit+"' class='btn btn-warning btn-sm'><i class='fa-solid fa-pencil'></i></a>" +
+                    "</div>" +
+                    "<div class='col-6 text-start'>" +
+                    "<form method='POST' action='" + routedelete + "'>" +
+                    '<?php echo csrf_field(); ?>' + '<?php echo method_field('DELETE'); ?>' +
                     "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(`Yakin akan di hapus?`)'><i class='fa-solid fa-trash'></i></button>" +
                     "</form>";
 
@@ -301,17 +319,25 @@
                 var routedelete = "<?php echo e(route('polygons.destroy', ':id')); ?>";
                 routedelete = routedelete.replace(':id', feature.properties.id);
 
+                var routeedit = "<?php echo e(route('polygons.edit', ':id')); ?>";
+                routeedit = routeedit.replace(':id', feature.properties.id);
+
                 var popupContent = "Nama: " + feature.properties.name + "<br>" +
                     "Deskripsi: " + feature.properties.description + "<br>" +
                     "Luas: " + feature.properties.area_hektar.toFixed(2) + "Ha <br>" +
                     "Dibuat: " + feature.properties.created_at + "<br>" +
                     "<img src='<?php echo e(asset('storage/images')); ?>/" + feature.properties.image +
                     "' width='200' alt=''>" + "<br>" +
-                    "<form method='POST' action='" + routedelete +"'>" +
-                    '<?php echo csrf_field(); ?>' + '<?php echo method_field("DELETE"); ?>' +
+                    "<div class='row mt-4'>" +
+                    "<div class='col-6 text-end'>" +
+                    "<a href ='"+routeedit+"' class='btn btn-warning btn-sm'><i class='fa-solid fa-pencil'></i></a>" +
+                    "</div>" +
+                    "<div class='col-6 text-start'>" +
+                    "<form method='POST' action='" + routedelete + "'>" +
+                    '<?php echo csrf_field(); ?>' + '<?php echo method_field('DELETE'); ?>' +
                     "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(`Yakin akan di hapus?`)'><i class='fa-solid fa-trash'></i></button>" +
                     "</form>";
-                    
+
                 layer.on({
                     click: function(e) {
                         polygon.bindPopup(popupContent);
@@ -339,7 +365,8 @@
         };
 
         L.control.layers(baseMaps, overlayMaps, {
-            collapsed: false
+            collapsed: false,
+            position: 'bottomright'
         }).addTo(map);
     </script>
 <?php $__env->stopSection(); ?>
