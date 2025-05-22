@@ -11,8 +11,37 @@
             </tr>
         </thead>
         <tbody>
-            //loop points data
+
             <?php $__currentLoopData = $points; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <tr>
+                <td><?php echo e($p->id); ?></td>
+                <td><?php echo e($p->name); ?></td>
+                <td><?php echo e($p->description); ?></td>
+                <td>
+                    <img src="<?php echo e(asset('storage/images/' . $p->image)); ?>" alt=""
+                    width="200" title="<?php echo e($p->image); ?>">
+                </td>
+                <td><?php echo e($p->image); ?></td>
+                <td><?php echo e($p->created_at); ?></td>
+                <td><?php echo e($p->updated_at); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $polylines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <tr>
+                <td><?php echo e($p->id); ?></td>
+                <td><?php echo e($p->name); ?></td>
+                <td><?php echo e($p->description); ?></td>
+                <td>
+                    <img src="<?php echo e(asset('storage/images/' . $p->image)); ?>" alt=""
+                    width="200" title="<?php echo e($p->image); ?>">
+                </td>
+                <td><?php echo e($p->image); ?></td>
+                <td><?php echo e($p->created_at); ?></td>
+                <td><?php echo e($p->updated_at); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        
+            <?php $__currentLoopData = $polygons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
                 <td><?php echo e($p->id); ?></td>
                 <td><?php echo e($p->name); ?></td>

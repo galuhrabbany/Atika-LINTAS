@@ -13,8 +13,37 @@
             </tr>
         </thead>
         <tbody>
-            //loop points data
+
             @foreach ($points as $p)
+            <tr>
+                <td>{{ $p->id }}</td>
+                <td>{{ $p->name }}</td>
+                <td>{{ $p->description }}</td>
+                <td>
+                    <img src="{{ asset('storage/images/' . $p->image) }}" alt=""
+                    width="200" title="{{ $p->image }}">
+                </td>
+                <td>{{ $p->image }}</td>
+                <td>{{ $p->created_at }}</td>
+                <td>{{ $p->updated_at }}</td>
+            </tr>
+            @endforeach
+            @foreach ($polylines as $p)
+            <tr>
+                <td>{{ $p->id }}</td>
+                <td>{{ $p->name }}</td>
+                <td>{{ $p->description }}</td>
+                <td>
+                    <img src="{{ asset('storage/images/' . $p->image) }}" alt=""
+                    width="200" title="{{ $p->image }}">
+                </td>
+                <td>{{ $p->image }}</td>
+                <td>{{ $p->created_at }}</td>
+                <td>{{ $p->updated_at }}</td>
+            </tr>
+            @endforeach
+
+            @foreach ($polygons as $p)
             <tr>
                 <td>{{ $p->id }}</td>
                 <td>{{ $p->name }}</td>

@@ -252,9 +252,9 @@
                     "<form method='POST' action='" + routedelete + "'>" +
                     '<?php echo csrf_field(); ?>' + '<?php echo method_field('DELETE'); ?>' +
                     "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(`Yakin akan di hapus?`)'><i class='fa-solid fa-trash'></i></button>" +
-                    "</form>";
-                "</div>" +
-                "</div>";
+                    "</form>" +
+                    "</div>" +
+                    "</div>" + "<br>" + "<p>Dibuat: " + feature.properties.user_created + "</p>";
 
                 layer.on({
                     click: function(e) {
@@ -295,7 +295,9 @@
                     "<form method='POST' action='" + routedelete + "'>" +
                     '<?php echo csrf_field(); ?>' + '<?php echo method_field('DELETE'); ?>' +
                     "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(`Yakin akan di hapus?`)'><i class='fa-solid fa-trash'></i></button>" +
-                    "</form>";
+                    "</form>" +
+                    "</div>" +
+                    "</div>" + "<br>" + "<p>Dibuat: " + feature.properties.user_created + "</p>";
 
                 layer.on({
                     click: function(e) {
@@ -336,7 +338,9 @@
                     "<form method='POST' action='" + routedelete + "'>" +
                     '<?php echo csrf_field(); ?>' + '<?php echo method_field('DELETE'); ?>' +
                     "<button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(`Yakin akan di hapus?`)'><i class='fa-solid fa-trash'></i></button>" +
-                    "</form>";
+                    "</form>" +
+                    "</div>" +
+                    "</div>" + "<br>" + "<p>Dibuat: " + feature.properties.user_created + "</p>";
 
                 layer.on({
                     click: function(e) {

@@ -7,21 +7,39 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo e(route('home')); ?>"><i class="fa-solid fa-house"></i></i>Home</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo e(route('map')); ?>"><i class="fa-solid fa-map-location-dot"></i>Map</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo e(route('table')); ?>"><i class="fa-solid fa-table"></i>Table</a>
                 </li>
+                <?php if(auth()->guard()->check()): ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-database"></i>Data
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="<?php echo e(route('api.points')); ?>" target="_blank">Points</a></li>
                         <li><a class="dropdown-item" href="<?php echo e(route('api.polylines')); ?>" target="_blank">Polylines</a></li>
                         <li><a class="dropdown-item" href="<?php echo e(route('api.polygons')); ?>" target="_blank">Polygons</a></li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <form action="<?php echo e(route('logout')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <button class="nav-link text-danger" type="submit"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+                    </form>
+                </li>
+                <?php endif; ?>
+
+                <?php if(auth()->guard()->guest()): ?>
+                <li class="nav-item"></li>
+                        <a class="nav-link text-primary" href="<?php echo e(route('login')); ?>"><i class="fa-solid fa-right-from-bracket"></i>Login</a>
+                    </form>
+                </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>
