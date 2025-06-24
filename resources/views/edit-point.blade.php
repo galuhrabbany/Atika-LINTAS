@@ -15,45 +15,82 @@
 
 @section('content')
     <div id="map"></div>
-
     <!-- Modal Edit Point -->
     <div class="modal fade" id="editpointModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Point</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Larger and centered -->
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <!-- Header -->
+                <div class="modal-header bg-warning text-dark rounded-top-4">
+                    <h5 class="modal-title d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit Titik Laporan
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
+
+                <!-- Form -->
                 <form method="POST" action="{{ route('points.update', $id) }}" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        @csrf
-                        @method('PATCH')
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <!-- Nama Pelapor -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark">Nama Pelapor</label>
+                                <input type="text" class="form-control shadow-sm" id="name" name="name" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                placeholder="Fill Point Name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                        </div>
+                            <!-- Jenis Sampah -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-dark">Jenis Sampah</label>
+                                <select class="form-select shadow-sm" name="jenis_sampah" id="jenis_sampah" required>
+                                    <option value="" disabled selected>Pilih jenis sampah</option>
+                                    <option value="Organik">Organik</option>
+                                    <option value="Anorganik">Anorganik</option>
+                                    <option value="B3">B3 (Bahan Berbahaya & Beracun)</option>
+                                    <option value="Elektronik">Elektronik</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="geom_point" class="form-label">Geometry</label>
-                            <textarea class="form-control" id="geom_point" name="geom_point" rows="3"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Photo</label>
-                            <input type="file" class="form-control" id="image_point" name="image"
-                                onchange="document.getElementById('preview-image-point').src = window.URL.createObjectURL(this.files[0])">
-                        </div>
-                        <img src="" alt="" id="preview-image-point" class="img-thumbnail" width="300">
+                            <!-- Deskripsi -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-dark">Deskripsi</label>
+                                <textarea class="form-control shadow-sm" id="description" name="description" rows="3"></textarea>
+                            </div>
 
+                            <!-- Alamat -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-dark">Alamat</label>
+                                <textarea class="form-control shadow-sm" id="alamat" name="alamat" rows="3"
+                                    placeholder="Contoh: Jl. Merdeka No. 5"></textarea>
+                            </div>
+
+                            <!-- Foto -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark">Bukti</label>
+                                <input type="file" class="form-control shadow-sm" id="image_point" name="image"
+                                    onchange="document.getElementById('preview-image-point').src = window.URL.createObjectURL(this.files[0])">
+                                <img src="" id="preview-image-point"
+                                    class="img-thumbnail mt-2 rounded-3 border border-secondary-subtle shadow-sm"
+                                    width="100%">
+                            </div>
+
+                            <!-- Geometri -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-dark">Geometry</label>
+                                <textarea class="form-control shadow-sm bg-light text-muted" id="geom_point" name="geom_point" rows="2" readonly></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+
+                    <!-- Footer -->
+                    <div class="modal-footer bg-light rounded-bottom-4 px-4 py-3">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark me-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-warning shadow-sm px-4">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Perubahan
+                        </button>
                     </div>
                 </form>
             </div>
@@ -74,7 +111,6 @@
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-
 
 
         /* Digitize Function */
@@ -108,11 +144,19 @@
 
                 drawnItems.addLayer(layer);
 
-                //menampilkan data ke dalam modal
-                $('#name').val(properties.name);
-                $('#description').val(properties.description);
-                $('#geom_point').val(objectGeometry);
-                $('#preview-image-point').attr('src', "{{ asset('storage/images') }}/" + properties.image);
+                layer.on({
+                    click: function(e) {
+                        $('#name').val(properties.name);
+                        $('#description').val(properties.description);
+                        $('#alamat').val(properties.alamat); // ← tambahkan ini
+                        $('#jenis_sampah').val(properties.jenis_sampah); // ← tambahkan ini
+                        $('#geom_point').val(objectGeometry);
+                        $('#preview-image-point').attr('src', "{{ asset('storage/images') }}/" +
+                            properties.image);
+                        $('#editpointModal').modal('show');
+                    }
+                });
+
 
                 //menampilkan modal edit
                 $('#editpointModal').modal('show');
@@ -133,6 +177,8 @@
                         //menampilkan data ke dalam modal
                         $('#name').val(properties.name);
                         $('#description').val(properties.description);
+                        $('#alamat').val(properties.alamat);
+                        $('#jenis_sampah').val(properties.jenis_sampah);
                         $('#geom_point').val(objectGeometry);
                         $('#preview-image-point').attr('src', "{{ asset('storage/images') }}/" +
                             properties.image);

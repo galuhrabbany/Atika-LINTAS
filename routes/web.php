@@ -25,6 +25,10 @@ Route::resource('polylines', PolylinesController::class);
 Route::resource('polygons', PolygonsController::class);
 
 Route::get('/map', [PointsController::class, 'index'])->middleware(['auth', 'verified'])->name('map');
-Route::get('/table', [TableController::class, 'index'])->name('table');
+Route::get('/table', [TableController::class, 'index'])->middleware(['auth', 'verified'])->name('table');
+
+Route::get('/data', function () {
+    return view('contact', ['title' => 'Kontak & Informasi']);
+})->name('data');
 
 require __DIR__.'/auth.php';

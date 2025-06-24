@@ -19,7 +19,7 @@ class TableController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Table',
+            'title' => 'Riwayat Laporan',
             'points' => $this->points->all(),
             'polylines' => $this->polylines->all(),
             'polygons' => $this->polygons->all(),

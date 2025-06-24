@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PointsModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PointsController extends Controller
 {
@@ -11,177 +12,130 @@ class PointsController extends Controller
     {
         $this->points = new PointsModel();
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $data = [
-            'title' => 'Map Medan',
-        ];
-
-        return view("map", $data);
+        return view("map", [
+            'title' => 'Pulau Jawa',
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'name' => 'required|unique:points,name',
-                'description' => 'required',
-                'geom_point' => 'required',
-                'image' => 'nullable|mimes:jpeg, png, gif, svg|max:2048',
-            ],
-            [
-                'name.required' => 'name is required.',
-                'name.unique' => 'Name already exist.',
-                'description.required' => 'Description is required.',
-                'geom_point.required' => 'Geometry Point is required.',
-            ]
-        );
+        $request->validate([
+            'name' => 'required|unique:points,name',
+            'description' => 'required',
+            'jenis_sampah' => 'required',
+            'alamat' => 'nullable|string|max:255',
+            'geom_point' => 'required',
+            'image' => 'nullable|mimes:jpeg,png,gif,svg|max:2048',
+        ]);
 
-        //create image directory if not exists
-        if (!is_dir('storage/images')) {
-            mkdir('./storage/images', 0777);
+        // Path folder aman menggunakan helper Laravel
+        $imagePath = storage_path('app/public/images');
+
+        // Buat folder jika belum ada menggunakan mkdir()
+        if (!file_exists($imagePath)) {
+            mkdir($imagePath, 0777, true);
         }
 
-        //Get Image file
+        // Proses upload gambar
+        $name_image = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_image = time() . "_point." . strtolower($image->getClientOriginalExtension());
-            $image->move('storage/images', $name_image);
-        } else {
-            $name_image = null;
+            $image->move($imagePath, $name_image);
         }
 
         $data = [
-            'geom' => $request->geom_point,
             'name' => $request->name,
             'description' => $request->description,
+            'alamat' => $request->alamat,
+            'jenis_sampah' => $request->jenis_sampah,
+            'geom' => $request->geom_point,
             'image' => $name_image,
-            'user_id' => auth()->user()->id,
-
+            'user_id' => Auth::id(),
         ];
 
-        //Create data
-        if (!$this->points->create($data)) {
-            return redirect()->route('map')->with('error', 'Point failed to add');
+        try {
+            $this->points->create($data);
+            return redirect()->route('map')->with('success', 'Point has been added');
+        } catch (\Exception $e) {
+            return redirect()->route('map')->with('error', 'Gagal menambahkan point: ' . $e->getMessage());
         }
-
-        //Redirect to Map
-        return redirect()->route('map')->with('success', 'Point has been added');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $data = [
+        return view('edit-point', [
             'title' => 'Edit Point',
             'id' => $id,
-        ];
-
-        return view('edit-point', $data);
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //dd($id, $request->all());
+        $request->validate([
+            'name' => 'required|unique:points,name,' . $id,
+            'description' => 'required',
+            'jenis_sampah' => 'required',
+            'alamat' => 'nullable|string|max:255',
+            'geom_point' => 'required',
+            'image' => 'nullable|mimes:jpeg,png,gif,svg|max:2048',
+        ]);
 
-        $request->validate(
-            [
-                'name' => 'required|unique:points,name,' . $id,
-                'description' => 'required',
-                'geom_point' => 'required',
-                'image' => 'nullable|mimes:jpeg, png, gif, svg|max:2048',
-            ],
-            [
-                'name.required' => 'name is required.',
-                'name.unique' => 'Name already exist.',
-                'description.required' => 'Description is required.',
-                'geom_point.required' => 'Geometry Point is required.',
-            ]
-        );
+        $imagePath = storage_path('app/public/images');
 
-        //create image directory if not exists
-        if (!is_dir('storage/images')) {
-            mkdir('./storage/images', 0777);
+        // Buat folder jika belum ada menggunakan mkdir()
+        if (!file_exists($imagePath)) {
+            mkdir($imagePath, 0777, true);
         }
 
-        //Get old image file name
-        $old_image =$this->points->find($id)->image;
+        $point = $this->points->find($id);
+        $old_image = $point->image;
+        $name_image = $old_image;
 
-        //Get Image file
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_image = time() . "_point." . strtolower($image->getClientOriginalExtension());
-            $image->move('storage/images', $name_image);
+            $image->move($imagePath, $name_image);
 
-            //Delete old image file
-            if ($old_image != null) {
-                if (file_exists('./storage/images/' . $old_image)) {
-                    unlink('./storage/images/' . $old_image);
-                }
+            // Hapus gambar lama jika ada
+            $oldImagePath = $imagePath . '/' . $old_image;
+            if ($old_image && file_exists($oldImagePath)) {
+                unlink($oldImagePath);
             }
-        } else {
-            $name_image = $old_image;
         }
 
         $data = [
-            'geom' => $request->geom_point,
             'name' => $request->name,
             'description' => $request->description,
+            'alamat' => $request->alamat,
+            'jenis_sampah' => $request->jenis_sampah,
+            'geom' => $request->geom_point,
             'image' => $name_image,
         ];
 
-        //Update data
-        if (!$this->points->find($id)->update($data)) {
-            return redirect()->route('map')->with('error', 'Point failed to Update');
+
+        if (!$point->update($data)) {
+            return redirect()->route('map')->with('error', 'Point failed to update');
         }
 
-        //Redirect to Map
-        return redirect()->route('map')->with('success', 'Point has been Updated');
+        return redirect()->route('map')->with('success', 'Point has been updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $imagefile = $this->points->find($id)->image;
+        $point = $this->points->find($id);
+        $imagePath = storage_path('app/public/images');
 
-        if (!$this->points->destroy($id)) {
-            return redirect()->route('map')->with('error', 'Point failed to delete');
+        if ($point->image && file_exists($imagePath . '/' . $point->image)) {
+            unlink($imagePath . '/' . $point->image);
         }
 
-        //Delete Image File
-        if ($imagefile != null) {
-            if (file_exists('./storage/images/' . $imagefile)) {
-                unlink('./storage/images/' . $imagefile);
-            }
+        if (!$point->delete()) {
+            return redirect()->route('map')->with('error', 'Point failed to delete');
         }
 
         return redirect()->route('map')->with('success', 'Point has been deleted');

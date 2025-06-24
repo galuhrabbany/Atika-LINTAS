@@ -10,9 +10,9 @@ class PublicController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Table',
+            'title' => 'LINTAS',
         ];
-        
+
         return view('home', $data);
     }
 }
